@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
+import { IUser } from 'interfaces/IUsers';
 import * as jwt from 'jsonwebtoken';
 
 export const verify = (req: Request, res: Response, next: NextFunction) => {
@@ -8,7 +9,7 @@ export const verify = (req: Request, res: Response, next: NextFunction) => {
         if (token) {
             const string = token.split(' ')[1];
 
-            const decoded = jwt.verify(string, "secret");
+            const decoded = jwt.verify(string, process.env.JWT_SECRET);
 
             res.locals.jwt = decoded;
 
@@ -24,19 +25,17 @@ export const verify = (req: Request, res: Response, next: NextFunction) => {
         });
     }
 }
-/*
-export const sign = (credential: ICredential): string => {
+
+export const sign = (user: IUser): string => {
     try {
         const result = jwt.sign({
-            _id: credential._id,
-            name_lastname: credential.name_lastname,
-            dni: credential.dni,
-            organization: credential.organization,
-            email: credential.email
+            _id: user._id,
+            name_lastname: user.name_lastname,
+            email: user.email
         }, process.env.JWT_SECRET);
 
         return result;
     } catch (e) {
         throw new Error(e);
     }
-}*/
+}
