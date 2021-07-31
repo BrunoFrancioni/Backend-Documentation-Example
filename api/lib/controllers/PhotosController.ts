@@ -20,13 +20,13 @@ class PhotosController {
 
                 result = {
                     result: true,
-                    posts: data,
+                    photos: data,
                     totalResults: data.length
                 }
             } else {
                 result = {
                     result: false,
-                    posts: null,
+                    photos: null,
                     totalResults: null
                 }
             }
@@ -54,13 +54,13 @@ class PhotosController {
 
                 result = {
                     result: true,
-                    posts: sData,
+                    photos: sData,
                     totalResults: data.length
                 }
             } else {
                 result = {
                     result: false,
-                    posts: null,
+                    photos: null,
                     totalResults: null
                 }
             }
@@ -82,12 +82,12 @@ class PhotosController {
 
                 result = {
                     result: true,
-                    post: data
+                    photo: data
                 }
             } else {
                 result = {
                     result: false,
-                    post: null
+                    photo: null
                 }
             }
 

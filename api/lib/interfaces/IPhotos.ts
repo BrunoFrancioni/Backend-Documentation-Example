@@ -8,7 +8,7 @@ export interface IPhoto {
 
 export interface IGetPhotosResult {
     result: boolean;
-    posts: IPhoto[] | null;
+    photos: IPhoto[] | null;
     totalResults: number | null;
 }
 
@@ -23,5 +23,5 @@ export interface IGetPhotosById {
 
 export interface IGetPhotosByIdResult {
     result: boolean;
-    post: IPhoto | null;
+    photo: IPhoto | null;
 }

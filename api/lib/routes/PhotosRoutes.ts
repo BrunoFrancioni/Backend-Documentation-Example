@@ -24,7 +24,7 @@ class PhotosRoutes {
 
                     if (result.result) {
                         return res.status(200).json({
-                            posts: result.posts,
+                            photos: result.photos,
                             totalResults: result.totalResults
                         });
                     } else {
@@ -55,7 +55,7 @@ class PhotosRoutes {
 
                     if (result.result) {
                         return res.status(200).json({
-                            post: result.post
+                            photo: result.photo
                         });
                     } else {
                         return res.status(500);
