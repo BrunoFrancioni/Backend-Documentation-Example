@@ -14,18 +14,22 @@ export class UsersRoutes {
 
                     if (result.result) {
                         return res.status(201).json({
-                            message: 'User Created Successfully'
+                            message: result.message
+                        });
+                    } else if (result.message !== null) {
+                        return res.status(400).json({
+                            message: result.message
                         });
                     } else {
-                        return res.status(400).json({
-                            message: 'User already exists'
+                        return res.status(500).json({
+                            message: 'Server error'
                         });
                     }
                 } catch (e) {
                     console.log(e);
 
                     return res.status(500).json({
-                        message: 'Error'
+                        message: 'Server error'
                     });
                 }
             });
@@ -36,21 +40,25 @@ export class UsersRoutes {
                     const result: ILoginResult = await this.usersController
                         .login(req.body.loginUser);
 
-                    if (!result.result) {
-                        return res.status(400).json({
-                            message: 'Email or password incorrect.'
-                        });
-                    } else {
+                    if (result.result) {
                         return res.status(200).json({
                             token: result.token,
                             user: result.user
+                        });
+                    } else if (result.message !== null) {
+                        return res.status(400).json({
+                            message: result.message
+                        });
+                    } else {
+                        return res.status(500).json({
+                            message: 'Server error'
                         });
                     }
                 } catch (e) {
                     console.log(e);
 
                     return res.status(500).json({
-                        message: 'Error'
+                        message: 'Server error'
                     });
                 }
             });

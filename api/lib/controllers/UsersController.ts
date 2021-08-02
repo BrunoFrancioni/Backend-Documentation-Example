@@ -14,11 +14,19 @@ export class UsersController {
 
     public async createUser(createUser: ICreateUsers): Promise<ICreateUsersResult> {
         try {
+            if (!createUser.name_lastname || !createUser.email || !createUser.password) {
+                const result: ICreateUsersResult = {
+                    result: false,
+                    message: 'All fields are required'
+                }
+            }
+
             const user = await this.Users.findOne({ email: createUser.email }).exec();
 
             if (user) {
                 const result: ICreateUsersResult = {
-                    result: false
+                    result: false,
+                    message: 'User already exists'
                 }
 
                 return result;
@@ -34,14 +42,16 @@ export class UsersController {
 
             if (newUser == null) {
                 const result: ICreateUsersResult = {
-                    result: false
+                    result: false,
+                    message: null
                 }
 
                 return result;
             }
 
             const result: ICreateUsersResult = {
-                result: true
+                result: true,
+                message: 'User Created Successfully'
             }
 
             return result;
@@ -52,11 +62,21 @@ export class UsersController {
 
     public async login(loginUser: ILoginUser): Promise<ILoginResult> {
         try {
+            if (!loginUser.email || !loginUser.password) {
+                const result: ILoginResult = {
+                    result: false,
+                    message: 'Email and password are required',
+                    token: null,
+                    user: null
+                }
+            }
+
             const user = await this.Users.findOne({ email: loginUser.email }).exec();
 
             if (!user) {
                 const result: ILoginResult = {
                     result: false,
+                    message: 'Email or password incorrect.',
                     token: null,
                     user: null
                 }
@@ -69,6 +89,7 @@ export class UsersController {
             if (!resultPassword) {
                 const result: ILoginResult = {
                     result: false,
+                    message: null,
                     token: null,
                     user: null
                 }
@@ -86,6 +107,7 @@ export class UsersController {
 
             const result: ILoginResult = {
                 result: true,
+                message: null,
                 token: token,
                 user: resultUser
             }

@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import { verify } from "../middleware/auth";
 import PostsController from "../controllers/PostsController";
 import {
     IGetPaginatePosts,
@@ -12,65 +13,71 @@ class PostsRoutes {
 
     public routes(app: any): void {
         app.route('/posts')
-            .get(async (req: Request, res: Response) => {
-                try {
-                    const params: IGetPaginatePosts = {
-                        page: Number(req.query.page),
-                        size: Number(req.query.size)
-                    }
+            .get(verify,
+                async (req: Request, res: Response) => {
+                    try {
+                        const params: IGetPaginatePosts = {
+                            page: Number(req.query.page),
+                            size: Number(req.query.size)
+                        }
 
-                    let result: IGetPostsResult;
+                        let result: IGetPostsResult;
 
-                    if (!params.page && !params.size) {
-                        result = await this.postsController.getPosts();
-                    } else {
-                        result = await this.postsController.getPaginatePosts(params);
-                    }
+                        if (!params.page && !params.size) {
+                            result = await this.postsController.getPosts();
+                        } else {
+                            result = await this.postsController.getPaginatePosts(params);
+                        }
 
-                    if (result.result) {
-                        return res.status(200).json({
-                            posts: result.posts,
-                            totalResults: result.totalResults
+                        if (result.result) {
+                            return res.status(200).json({
+                                posts: result.posts,
+                                totalResults: result.totalResults
+                            });
+                        } else {
+                            return res.status(500).json({
+                                message: 'Server error'
+                            });
+                        }
+                    } catch (e) {
+                        return res.status(500).json({
+                            message: 'Server error'
                         });
-                    } else {
-                        return res.status(500);
                     }
-                } catch (e) {
-                    return res.status(500).json({
-                        error: e
-                    });
-                }
-            });
+                });
 
         app.route('/posts/:id')
-            .get(async (req: Request, res: Response) => {
-                try {
-                    const params: IGetPostById = {
-                        id: Number(req.params.id)
-                    }
+            .get(verify,
+                async (req: Request, res: Response) => {
+                    try {
+                        const params: IGetPostById = {
+                            id: Number(req.params.id)
+                        }
 
-                    if (!params.id) {
-                        return res.status(400).json({
-                            message: 'Post id must not be null'
+                        if (!params.id) {
+                            return res.status(400).json({
+                                message: 'Post id must not be null'
+                            });
+                        }
+
+                        let result: IGetPostsByIdResult = await this.postsController
+                            .getPostById(params);
+
+                        if (result.result) {
+                            return res.status(200).json({
+                                post: result.post
+                            });
+                        } else {
+                            return res.status(500).json({
+                                message: 'Server error'
+                            });
+                        }
+                    } catch (e) {
+                        return res.status(500).json({
+                            message: 'Server error'
                         });
                     }
-
-                    let result: IGetPostsByIdResult = await this.postsController
-                        .getPostById(params);
-
-                    if (result.result) {
-                        return res.status(200).json({
-                            post: result.post
-                        });
-                    } else {
-                        return res.status(500);
-                    }
-                } catch (e) {
-                    return res.status(500).json({
-                        error: e
-                    });
-                }
-            });
+                });
     }
 }
 

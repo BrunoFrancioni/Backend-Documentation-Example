@@ -12,6 +12,7 @@ export interface ICreateUsers {
 
 export interface ICreateUsersResult {
     result: boolean;
+    message: string;
 }
 
 export interface ILoginUser {
@@ -21,6 +22,7 @@ export interface ILoginUser {
 
 export interface ILoginResult {
     result: boolean;
+    message: string;
     token: string;
     user: IUser;
 }
